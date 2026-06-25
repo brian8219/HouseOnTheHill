@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的動態下拉選單網頁</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 320px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-weight: bold;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+        }
+        select:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+        /* 新增：顯示資訊的區塊樣式 */
+        .result-box {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            border-radius: 4px;
+            font-size: 15px;
+            color: #2e7d32;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>請選擇您的喜好</h2>
+        
+        <div class="form-group">
+            <label for="category">類別：</label>
+            <select id="category" name="category">
+                <option value="">-- 請選擇類別 --</option>
+                <option value="food">美食佳餚</option>
+                <option value="travel">旅遊景點</option>
+                <option value="movie">電影娛樂</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="time">偏好時間：</label>
+            <select id="time" name="time">
+                <option value="">-- 請選擇時間 --</option>
+                <option value="morning">平日白天</option>
+                <option value="evening">下班晚上</option>
+                <option value="weekend">週末假日</option>
+            </select>
+        </div>
+
+        <div id="result" class="result-box">
+            請選擇上方選項以查看推薦資訊。
+        </div>
+    </div>
+
+    <script>
+        // 1. 取得網頁上的選單與結果區塊元素
+        const categorySelect = document.getElementById('category');
+        const timeSelect = document.getElementById('time');
+        const resultDiv = document.getElementById('result');
+
+        // 2. 定義特定資訊的資料庫（根據不同的組合顯示不同文字）
+        const recommendations = {
+            'food-morning': '💡 推薦：早上的傳統早市或文青早午餐店，這時候食材最鮮！',
+            'food-evening': '💡 推薦：下班後最適合去居酒屋、夜市或火鍋店放鬆一下。',
+            'food-weekend': '💡 推薦：週末適合預約熱門的網美餐廳或安排一趟美食吃到飽之旅。',
+            
+            'travel-morning': '💡 推薦：清晨去爬山步道、國家公園，空氣最好且不會太熱。',
+            'travel-evening': '💡 推薦：晚上適合到貓空看夜景，或是逛逛市區的文創市集。',
+            'travel-weekend': '💡 推薦：兩天一夜的露營，或去外縣市景點深度旅遊。',
+            
+            'movie-morning': '💡 推薦：早場電影人潮最少，看片品質最高且票價可能較便宜。',
+            'movie-evening': '💡 推薦：下班看場熱門好萊塢大片，舒壓放鬆剛好。',
+            'weekend-movie': '💡 推薦：週末待在家裡，開著冷氣用 Netflix 馬拉松式追劇最過癮！'
+        };
+
+        // 3. 建立一個更新文字的函式
+        function updateText() {
+            const categoryValue = categorySelect.value;
+            const timeValue = timeSelect.value;
+
+            // 如果使用者兩邊都有選
+            if (categoryValue && timeValue) {
+                const combinedKey = `${categoryValue}-${timeValue}`; // 組合成像是 "food-evening"
+                
+                // 檢查資料庫有沒有這一組資料
+                if (recommendations[combinedKey]) {
+                    resultDiv.innerHTML = recommendations[combinedKey];
+                } else {
+                    resultDiv.innerHTML = '查無特定的推薦資訊。';
+                }
+            } else {
+                // 如果有沒有選完的
+                resultDiv.innerHTML = '請完成兩個選單的選擇。';
+            }
+        }
+
+        // 4. 當選單「改變（change）」時，執行更新文字的函式
+        categorySelect.addEventListener('change', updateText);
+        timeSelect.addEventListener('change', updateText);
+    </script>
+
+</body>
+</html>
