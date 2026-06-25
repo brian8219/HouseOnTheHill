@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的動態下拉選單網頁</title>
+    <title>帶有超連結的動態網頁</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,18 +47,28 @@
         }
         select:focus {
             outline: none;
-            border-color: #4caf50;
+            border-color: #2196F3;
         }
-        /* 新增：顯示資訊的區塊樣式 */
         .result-box {
             margin-top: 25px;
             padding: 15px;
-            background-color: #e8f5e9;
-            border-left: 5px solid #4caf50;
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196F3;
             border-radius: 4px;
             font-size: 15px;
-            color: #2e7d32;
+            color: #0d47a1;
             line-height: 1.6;
+        }
+        /* 新增：超連結的樣式 */
+        .result-box a {
+            color: #1565c0;
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 1px dashed #1565c0;
+        }
+        .result-box a:hover {
+            color: #0d47a1;
+            border-bottom: 1px solid #0d47a1;
         }
     </style>
 </head>
@@ -93,48 +103,44 @@
     </div>
 
     <script>
-        // 1. 取得網頁上的選單與結果區塊元素
         const categorySelect = document.getElementById('category');
         const timeSelect = document.getElementById('time');
         const resultDiv = document.getElementById('result');
 
-        // 2. 定義特定資訊的資料庫（根據不同的組合顯示不同文字）
+        // 修改：在文字中直接嵌入 HTML 的 <a> 標籤
+        // target="_blank" 可以讓使用者點擊時自動開啟新分頁
         const recommendations = {
-            'food-morning': '💡 推薦：早上的傳統早市或文青早午餐店，這時候食材最鮮！',
-            'food-evening': '💡 推薦：下班後最適合去居酒屋、夜市或火鍋店放鬆一下。',
-            'food-weekend': '💡 推薦：週末適合預約熱門的網美餐廳或安排一趟美食吃到飽之旅。',
+            'food-morning': '🍳 推薦早餐：來份澎湃的早午餐吧！看看 <a href="Survivor001.md" target="_blank">生活地圖</a> 找附近的店。',
+            'food-evening': '🍻 推薦晚餐：下班適合聚餐，點此查看 <a href="Survivor001.md" target="_blank">美食推薦網</a>。',
+            'food-weekend': '🍰 推薦週末：去網美咖啡廳打卡！參考 <a href="Survivor001.md" target="_blank">Instagram 熱門美食</a>。',
             
-            'travel-morning': '💡 推薦：清晨去爬山步道、國家公園，空氣最好且不會太熱。',
-            'travel-evening': '💡 推薦：晚上適合到貓空看夜景，或是逛逛市區的文創市集。',
-            'travel-weekend': '💡 推薦：兩天一夜的露營，或去外縣市景點深度旅遊。',
+            'travel-morning': '⛰️ 推薦景點：早上爬山空氣好，出發前先查 <a href="Survivor001.md" target="_blank">中央氣象署天氣</a>。',
+            'travel-evening': '🌌 推薦夜遊：晚上來看夜景，到 <a href="Survivor001.md" target="_blank">Google Maps</a> 搜尋附近的觀景台。',
+            'travel-weekend': '🚗 推薦遠遊：週末適合度假，上 <a href="Survivor001.md" target="_blank">Booking.com</a> 訂房準備出發。',
             
-            'movie-morning': '💡 推薦：早場電影人潮最少，看片品質最高且票價可能較便宜。',
-            'movie-evening': '💡 推薦：下班看場熱門好萊塢大片，舒壓放鬆剛好。',
-            'weekend-movie': '💡 推薦：週末待在家裡，開著冷氣用 Netflix 馬拉松式追劇最過癮！'
+            'movie-morning': '🎬 推薦早場：早場電影最舒適，去 <a href="Survivor001.md" target="_blank">Yahoo電影戲劇</a> 查時刻表。',
+            'movie-evening': '🍿 推薦夜場：下班看電影放鬆，用 <a href="Survivor001.md" target="_blank">Netflix</a> 線上觀看。',
+            'movie-weekend': '📺 推薦週末：週末在家躺著看劇，到 <a href="Survivor001.md" target="_blank">YouTube</a> 找免費強檔。'
         };
 
-        // 3. 建立一個更新文字的函式
         function updateText() {
             const categoryValue = categorySelect.value;
             const timeValue = timeSelect.value;
 
-            // 如果使用者兩邊都有選
             if (categoryValue && timeValue) {
-                const combinedKey = `${categoryValue}-${timeValue}`; // 組合成像是 "food-evening"
+                const combinedKey = `${categoryValue}-${timeValue}`;
                 
-                // 檢查資料庫有沒有這一組資料
                 if (recommendations[combinedKey]) {
+                    // 使用 innerHTML 才能把 <a> 標籤解析成真正的超連結，如果用 textContent 會變成純文字
                     resultDiv.innerHTML = recommendations[combinedKey];
                 } else {
                     resultDiv.innerHTML = '查無特定的推薦資訊。';
                 }
             } else {
-                // 如果有沒有選完的
                 resultDiv.innerHTML = '請完成兩個選單的選擇。';
             }
         }
 
-        // 4. 當選單「改變（change）」時，執行更新文字的函式
         categorySelect.addEventListener('change', updateText);
         timeSelect.addEventListener('change', updateText);
     </script>
